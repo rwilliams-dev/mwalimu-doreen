@@ -81,6 +81,12 @@ export default function SignupPage() {
             />
           </div>
           {error && <p className="text-red-500 text-sm bg-red-50 rounded-xl px-4 py-2">{error}</p>}
+          <p className="text-xs text-[var(--foreground)]/50">
+            By creating an account, you agree to our{" "}
+            <Link href="/terms" className="text-[var(--primary)] hover:underline">Terms of Service</Link>
+            {" "}and{" "}
+            <Link href="/privacy" className="text-[var(--primary)] hover:underline">Privacy Policy</Link>.
+          </p>
           <button
             type="submit" disabled={loading}
             className="flex items-center justify-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white font-bold py-3 rounded-xl transition-colors mt-2 disabled:opacity-60"
