@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST() {
   const supabase = await createClient();
@@ -22,7 +23,10 @@ export async function POST() {
       metadata: { supabase_user_id: user.id },
     });
     customerId = customer.id;
-    await supabase.from("subscriptions").upsert({
+    // subscriptions has no user-writable insert/update policy (billing state
+    // must only be set by trusted server code), so this needs the admin client.
+    const supabaseAdmin = createAdminClient();
+    await supabaseAdmin.from("subscriptions").upsert({
       user_id: user.id,
       stripe_customer_id: customerId,
       status: "inactive",
